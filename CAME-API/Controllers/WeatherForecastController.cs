@@ -23,11 +23,25 @@ namespace CAME_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("SL")]
+        public IEnumerable<WeatherForecastSL> GetSL()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecastSL
+            {
+                Pk = index,
+                Extra = false,
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+            })
+            .ToArray();
+        }
+
+        [HttpGet("Items")] //[HttpGet("{WeatherID:int}")]
+        public IEnumerable<WeatherForecastItems> GetItems()
+        {
+            var rng = new Random();
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecastItems
             {
                 Pk = index,
                 Date = DateTime.Now.AddDays(index),
@@ -36,5 +50,6 @@ namespace CAME_API.Controllers
             })
             .ToArray();
         }
+
     }
 }
