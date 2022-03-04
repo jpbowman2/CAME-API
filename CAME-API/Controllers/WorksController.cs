@@ -22,11 +22,11 @@ namespace CAME_API.Controllers
             this.context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Work>>> GetAll()
+        [HttpGet("Ministry/{MinistryID:int}")]
+        public async Task<ActionResult<List<Work>>> GetAll(int MinistryID)
         {
             //return /*await*/ repository.GetAll();
-            return await context.tblMinistryWorks.AsNoTracking().ToListAsync();
+            return await context.tblMinistryWorks.Where(x => x.MinistryID == MinistryID).AsNoTracking().ToListAsync();
         }
 
         [HttpGet("{id:int}")]
