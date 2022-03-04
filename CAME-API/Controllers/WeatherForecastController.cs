@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using CAME_API.Services;
+using CAME_API.Entities;
+
 namespace CAME_API.Controllers
 {
     [ApiController]
@@ -17,39 +20,46 @@ namespace CAME_API.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly IForecastsRepository repository;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastsRepository repository)
         {
             _logger = logger;
+            this.repository = repository;
         }
 
         [HttpGet("SL")]
-        public IEnumerable<WeatherForecastSL> GetSL()
+        public async Task<ActionResult<IEnumerable<Forecast>>> GetSL()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecastSL
-            {
-                Pk = index,
-                Extra = false,
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-            })
-            .ToArray();
+
+            List<Forecast> f = /*await*/ repository.GetAll();
+            return f;
         }
 
-        [HttpGet("Items")] //[HttpGet("{WeatherID:int}")]
-        public IEnumerable<WeatherForecastItems> GetItems()
+        [HttpGet("Items")] 
+        public async Task<ActionResult<IEnumerable<Forecast>>> GetItems()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecastItems
-            {
-                Pk = index,
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            List<Forecast> f = /*await*/ repository.GetAll();
+            return f;
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Forecast>> GetOne(int Id)
+        {
+            Forecast f = /*await*/ repository.GetOne(Id);
+            if (f==null) { 
+                return NotFound(); 
+            }
+            return f;
+        }
+
+        [HttpPost]
+        public void Post() { }
+
+        [HttpPut]
+        public void Put() { }
+
+        [HttpDelete]
+        public void Delete() { }
 
     }
 }
