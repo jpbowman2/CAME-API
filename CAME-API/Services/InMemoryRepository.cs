@@ -10,7 +10,7 @@ namespace CAME_API.Services
 {
     public class InMemoryWorksRepository : IWorksRepository
     {
-        private List<Work> _works;
+        private readonly List<Work> _works;
         public InMemoryWorksRepository()
         {
             _works = new List<Work>()
@@ -57,7 +57,7 @@ namespace CAME_API.Services
 
     public class InMemoryForecastsRepository: IForecastsRepository
     {
-        private List<Forecast> _forecasts;
+        private readonly List<Forecast> _forecasts;
         public InMemoryForecastsRepository()
         {
             _forecasts = new List<Forecast>()

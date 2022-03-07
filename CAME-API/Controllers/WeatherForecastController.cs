@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 using CAME_API.Services;
 using CAME_API.Entities;
@@ -14,36 +15,45 @@ namespace CAME_API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        //private static readonly string[] Summaries = new[]
+        //{
+        //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        //};
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        //private readonly ILogger<WeatherForecastController> _logger;
         private readonly IForecastsRepository repository;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastsRepository repository)
+        private readonly IMapper mapper;
+
+        public WeatherForecastController(
+            //ILogger<WeatherForecastController> logger,
+            IForecastsRepository repository,
+            IMapper mapper
+            )
         {
-            _logger = logger;
+            //_logger = logger;
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         [HttpGet("SL")]
-        public async Task<ActionResult<IEnumerable<Forecast>>> GetSL()
+        public ActionResult<IEnumerable<ForecastSL>> GetSL()
         {
 
             List<Forecast> f = /*await*/ repository.GetAll();
-            return f;
+            var ForecastSLs = mapper.Map<List<ForecastSL>>(f);
+            return ForecastSLs;
         }
 
         [HttpGet("Items")] 
-        public async Task<ActionResult<IEnumerable<Forecast>>> GetItems()
+        public ActionResult<IEnumerable<ForecastItem>> GetItems()
         {
             List<Forecast> f = /*await*/ repository.GetAll();
-            return f;
+            var ForecastItems = mapper.Map<List<ForecastItem>>(f);
+            return ForecastItems;
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Forecast>> GetOne(int Id)
+        public ActionResult<Forecast> GetOne(int Id)
         {
             Forecast f = /*await*/ repository.GetOne(Id);
             if (f==null) { 
