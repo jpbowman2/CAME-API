@@ -63,7 +63,7 @@ namespace CAME_API.Services
             _forecasts = new List<Forecast>()
             {
                 new Forecast() {
-                    Pk = 1,
+                    Id = 1,
                     Extra = false,
                     Date = new DateTime(2022, 04, 01),
                     TemperatureC = 0,
@@ -71,7 +71,7 @@ namespace CAME_API.Services
                 },
 
                 new Forecast() {
-                    Pk = 2,
+                    Id = 2,
                     Extra = true,
                     Date = new DateTime(2022, 04, 02),
                     TemperatureC = 10,
@@ -79,15 +79,15 @@ namespace CAME_API.Services
                 },
 
                 new Forecast() {
-                    Pk = 3,
+                    Id = 3,
                     Extra = false,
                     Date = new DateTime(2022, 04, 03),
-                    TemperatureC = 20,
+                    TemperatureC = 40,
                     Summary="Warm"
                 },
 
                 new Forecast() {
-                    Pk = 4,
+                    Id = 4,
                     Extra = true,
                     Date = new DateTime(2022, 04, 04),
                     TemperatureC = 30,
@@ -103,7 +103,7 @@ namespace CAME_API.Services
 
         public Forecast GetOne(int Id)
         {
-            return _forecasts.FirstOrDefault(x => x.Pk == Id);
+            return _forecasts.FirstOrDefault(x => x.Id == Id);
         }
     }
 

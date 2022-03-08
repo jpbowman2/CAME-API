@@ -5,7 +5,7 @@ namespace CAME_API.Entities
 {
     public class Forecast
     {
-        [Key] public int Pk { get; set; }
+        [Key] public int Id { get; set; }
         public bool Extra { get; set; }
         public DateTime Date { get; set; }
 
