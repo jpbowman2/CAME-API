@@ -35,24 +35,16 @@ namespace CAME_API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("SL")]
-        public ActionResult<IEnumerable<ForecastSL>> GetSL()
+        [HttpGet()]
+        public ActionResult<List<ForecastSL>> GetAll()
         {
 
-            List<Forecast> f = /*await*/ repository.GetAll();
-            var ForecastSLs = mapper.Map<List<ForecastSL>>(f);
+            List<Forecast> forecasts = /*await*/ repository.GetAll();
+            var ForecastSLs = mapper.Map<List<ForecastSL>>(forecasts).ToList();
             return ForecastSLs;
         }
 
-        [HttpGet("Items")] 
-        public ActionResult<IEnumerable<ForecastItem>> GetItems()
-        {
-            List<Forecast> f = /*await*/ repository.GetAll();
-            var ForecastItems = mapper.Map<List<ForecastItem>>(f);
-            return ForecastItems;
-        }
-
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "getNew")]
         public ActionResult<Forecast> GetOne(int Id)
         {
             Forecast f = /*await*/ repository.GetOne(Id);
@@ -63,13 +55,27 @@ namespace CAME_API.Controllers
         }
 
         [HttpPost]
-        public void Post() { }
+        public ActionResult<Forecast> Post([FromBody] ForecastNew nf)
+        {
+            Forecast f = repository.Add(nf);
+            return new CreatedAtRouteResult("getNew", new { id = f.Id }, f);
+        }
 
-        [HttpPut]
-        public void Put() { }
+        [HttpPut("{id:int}")]
 
-        [HttpDelete]
-        public void Delete() { }
+        public ActionResult Put(int id, [FromBody] ForecastNew nf)
+        {
+            var b = repository.Update(id, nf);
+            if (!b) { return NotFound(); }
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id) {
+            var b = repository.Delete(id);
+            if (!b) { return NotFound(); }
+            return Ok();
+        }
 
     }
 }

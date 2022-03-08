@@ -23,6 +23,9 @@ namespace CAME_API.Services
         /*new*/
         List<Forecast> GetAll();
         Forecast GetOne(int Id);
+        Forecast Add(ForecastNew nf);
+        bool Update(int id, ForecastNew nf);
+        bool Delete(int id);
     }
 
 }

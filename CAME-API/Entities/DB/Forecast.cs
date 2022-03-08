@@ -5,7 +5,15 @@ namespace CAME_API.Entities
 {
     public class Forecast
     {
-        [Key] public int Id { get; set; }
+        public Forecast(ForecastNew nw)
+        {
+            Extra = nw.Extra;
+            Date = nw.Date;
+            TemperatureC = nw.TemperatureC;
+            Summary = nw.Summary;
+
+        }
+    [Key] public int Id { get; set; }
         public bool Extra { get; set; }
         public DateTime Date { get; set; }
 

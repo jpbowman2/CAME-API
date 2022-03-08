@@ -7,7 +7,7 @@ namespace CAME_API.Entities
 {
     public class ForecastSL
     {
-        public int Pk { get; set; }
+        public int ID { get; set; }
         public bool Extra { get; set; }
         public DateTime Date { get; set; }
         public int TemperatureC { get; set; }
@@ -16,12 +16,22 @@ namespace CAME_API.Entities
 
     public class ForecastItem
     {
-        public int Pk { get; set; }
+        public int ID { get; set; }
         public DateTime Date { get; set; }
         public int TemperatureC { get; set; }
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
         public string Summary { get; set; }
 
     }
+
+    public class ForecastNew
+    {
+        public bool Extra { get; set; }
+        public DateTime Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string Summary { get; set; }
+    }
+
+
 }
 

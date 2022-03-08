@@ -38,7 +38,7 @@ namespace CAME_API.Controllers
             return works; // workDTOs;
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "getWork")]
         public async Task<ActionResult<Work>> GetOne(int Id)
         {
             var w = await context.tblMinistryWorks.FirstOrDefaultAsync(x => x.MinistryWorksID == Id);
@@ -49,24 +49,33 @@ namespace CAME_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] NewWork nw) {
+        public async Task<ActionResult<Work>> Post([FromBody] NewWork nw) {
             Work w = mapper.Map<Work>(nw);
             context.Add(w);
             await context.SaveChangesAsync();
-            return Ok(); // new CreatedAtRouteResult("getWork", new { Id = w.MinistryWorksID }, w);
+            return new CreatedAtRouteResult("getWork", new { id = w.MinistryWorksID }, w);
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, [FromBody] NewWork nw ) {
-            var w = mapper.Map<Work>(nw);
+            Work w = mapper.Map<Work>(nw);
             w.MinistryWorksID = id;
             context.Entry(w).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete]
-        public void Delete() { }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id) {
+            var exists = await context.tblMinistryWorks.AnyAsync(x => x.MinistryWorksID == id);
+            if (!exists)
+            {
+                return NotFound();
+            }
+            context.Remove(new Work() { MinistryWorksID = id });
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
 
     }
 }
